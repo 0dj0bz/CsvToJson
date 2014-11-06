@@ -18,14 +18,9 @@ app.post('/', function(req, res){
 	var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files){
         if(err) return res.redirect(303, '/error');
-        console.log('received fields:');
-        console.log(fields);
-        console.log('received files:');
-        console.log(files);
 
         fs.readFile ( files.filename.path, function (err, data) {
         	if (err) throw err;
-        	console.log (data);
         	res.type ('text/json');
 
             var jres = processArray (data);
@@ -49,24 +44,24 @@ function processArray (buffer)
     var darry = buffer.toString().split("\r");
     var outStr = new String();
 
-    outStr = "{ \n\"transactions\" : [\n";
+    outStr = "{  \n  \"transactions\" : [\n";
 
     var colheads = darry[0].split(",");
 
     for (idx=1;idx<darry.length;idx++) {
 
-        outStr += "  {  \n";
+        outStr += "    {  \n";
 
         var arry = darry[idx].split(",");
 
         for (jdx=0;jdx<colheads.length;jdx++) {
 
-            outStr += "    \"" + colheads[jdx] + "\":\"" +  arry[jdx] + "\"";      
+            outStr += "      \"" + colheads[jdx] + "\":\"" +  arry[jdx] + "\"";      
             if (jdx < colheads.length-1) outStr += ", " 
             outStr += " \n"  
         }
 
-        outStr += "  }\n";
+        outStr += "    }\n";
 
 
 
