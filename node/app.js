@@ -24,7 +24,18 @@ app.post('/', function(req, res){
         	res.type ('text/json');
 
             var jres = processArray (data);
-            res.send (jres.toString());
+
+            //var jstr =  '{ "a": 1, "b":2, "c":3  }';
+
+            // var jstr2 = JSON.stringify(jres);
+
+            console.log (jres);
+
+            var jarry = JSON.parse(jres);
+
+            console.log('jarry.transactions[1].year: ' + jarry.transactions[1].Year);
+
+            res.send (jarry);
  
 
         });
@@ -41,7 +52,12 @@ app.post('/', function(req, res){
 
 function processArray (buffer) 
 {
+    //var inBufStr = buffer.toString().replace("\"", " ");
+    //inBufStr2 = inBufStr.replace(",", " ");
+    //inBufStr3 = inBufStr2.replace(":", " ");
+
     var darry = buffer.toString().split("\r");
+
     var outStr = new String();
 
     outStr = "{  \n  \"transactions\" : [\n";
@@ -63,6 +79,7 @@ function processArray (buffer)
 
         outStr += "    }\n";
 
+        if (idx < darry.length-1) outStr += ', ';
 
 
     }
